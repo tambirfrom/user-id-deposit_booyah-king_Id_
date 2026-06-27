@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>user-id-deposit_booyah-king_Id_</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+:root{
+  --accent:#1877F2; --accent-soft:rgba(24,119,242,0.1); --accent-border:rgba(24,119,242,0.35);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:#FFFFFF;color:#1a1a1a;font-family:'Inter',sans-serif;min-height:100vh;}
+.hidden{display:none !important;}
+h1,h2,h3{font-family:'Rajdhani','Inter',sans-serif;margin:0;}
+
+#blocked-screen{position:fixed;inset:0;background:#fff;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;padding:24px;text-align:center;z-index:50;}
+#blocked-screen .icon{font-size:48px;}
+#blocked-screen p{color:#666;font-size:14px;max-width:300px;}
+#blocked-screen button{padding:12px 26px;border-radius:10px;background:#1a1a1a;color:#fff;border:none;font-weight:600;font-size:14px;}
+
+#loading-screen{position:fixed;inset:0;background:#fff;display:flex;align-items:center;justify-content:center;z-index:60;}
+.spinner{width:38px;height:38px;border-radius:50%;border:4px solid #eee;border-top-color:var(--accent);animation:spin 0.8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+#gateway-app{max-width:440px;margin:0 auto;padding:24px 20px 60px;}
+
+.gw-header{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
+.gw-header img{width:42px;height:42px;border-radius:10px;object-fit:cover;}
+.gw-header h1{font-size:18px;color:#1a1a1a;}
+.gw-header .gw-sub{font-size:12px;color:#888;}
+
+.gw-amount-card{border-radius:16px;padding:22px;text-align:center;margin-bottom:20px;background:var(--accent-soft);border:1px solid var(--accent-border);}
+.gw-amount-card .gw-amount-label{font-size:12px;color:#666;margin-bottom:6px;}
+.gw-amount-card .gw-amount-value{font-size:32px;font-weight:700;color:var(--accent);font-family:'Rajdhani',sans-serif;}
+
+.gw-step-card{border-radius:14px;border:1px solid #eee;padding:18px;margin-bottom:16px;background:#fafafa;}
+.gw-step-card h3{font-size:14px;color:var(--accent);margin-bottom:10px;}
+.gw-step-card ol{margin:0;padding-left:18px;font-size:13.5px;color:#333;line-height:1.9;}
+.gw-step-card .gw-number-box{display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid #e2e2e2;border-radius:10px;padding:12px 14px;margin-top:10px;}
+.gw-step-card .gw-number-box span{font-weight:700;font-size:16px;letter-spacing:.5px;color:#1a1a1a;}
+.gw-step-card .gw-number-box button{background:var(--accent);color:#fff;border:none;padding:8px 14px;border-radius:8px;font-weight:600;font-size:12px;}
+
+.gw-timer-wrap{text-align:center;margin:20px 0;}
+.gw-timer{font-size:38px;font-weight:700;color:var(--accent);font-family:'Rajdhani',sans-serif;}
+.gw-timer-label{font-size:12px;color:#888;margin-top:4px;}
+.gw-timer.expired{color:#e23636;}
+
+.gw-input-group{margin-bottom:16px;}
+.gw-input-group label{display:block;font-size:12.5px;color:#444;margin-bottom:6px;font-weight:600;}
+.gw-input-group input{width:100%;padding:13px 14px;border-radius:10px;border:1.5px solid #ddd;font-size:15px;background:#fff;color:#1a1a1a;}
+.gw-input-group input:focus{outline:none;border-color:var(--accent);}
+
+.gw-submit-btn{width:100%;padding:15px 0;border-radius:12px;background:var(--accent);color:#fff;font-weight:700;font-size:15px;border:none;font-family:'Rajdhani',sans-serif;letter-spacing:.4px;}
+.gw-submit-btn:disabled{opacity:.5;}
+
+.gw-error{font-size:12.5px;color:#e23636;margin-top:8px;text-align:center;min-height:14px;}
+.gw-success-box{text-align:center;padding:30px 10px;}
+.gw-success-box .icon{font-size:54px;margin-bottom:14px;}
+.gw-success-box h2{font-size:18px;margin-bottom:8px;}
+.gw-success-box p{font-size:13.5px;color:#666;}
+.gw-back-btn{margin-top:18px;padding:11px 22px;border-radius:10px;border:1.5px solid #ddd;background:#fff;color:#333;font-weight:600;font-size:13px;}
+</style>
+</head>
+<body>
+
+  <div id="loading-screen"><div class="spinner"></div></div>
+
+  <div id="blocked-screen" class="hidden">
+    <div class="icon">🚫</div>
+    <h2>প্রবেশ করা যাবে না</h2>
+    <p id="blocked-message">আপনার কোনো বৈধ ডিপোজিট রিকোয়েস্ট পাওয়া যায়নি, অথবা আপনি লগইন করা নেই।</p>
+    <button id="blocked-back-btn">অ্যাপে ফিরে যান</button>
+  </div>
+
+  <div id="gateway-app" class="hidden">
+    <div class="gw-header">
+      <img src="https://i.ibb.co.com/q3nFTRvZ/file-00000000fdc8720c878d80a891c30e5a.png" alt="BOOYAH KING">
+      <div>
+        <h1>পেমেন্ট সম্পন্ন করুন</h1>
+        <div class="gw-sub" id="gw-method-label">মাধ্যম: --</div>
+      </div>
+    </div>
+
+    <div class="gw-amount-card">
+      <div class="gw-amount-label">পরিশোধযোগ্য পরিমাণ</div>
+      <div class="gw-amount-value" id="gw-amount-display">৳০.০০</div>
+    </div>
+
+    <div id="gw-form-section">
+      <div class="gw-step-card">
+        <h3>ধাপ ১ — টাকা সেন্ড মানি করুন</h3>
+        <ol>
+          <li>নিচের অফিশিয়াল নম্বরে <b id="gw-amount-inline">৳০.০০</b> টাকা "Send Money" করুন।</li>
+          <li>সেন্ড মানি সম্পন্ন হলে আপনার মেসেজে আসা Transaction ID (TrxID) কপি করুন।</li>
+        </ol>
+        <div class="gw-number-box">
+          <span id="gw-cashout-number">--</span>
+          <button id="gw-copy-number-btn">কপি করুন</button>
+        </div>
+      </div>
+
+      <div class="gw-timer-wrap">
+        <div class="gw-timer" id="gw-timer">০১:৩০</div>
+        <div class="gw-timer-label">এই সময়ের মধ্যে Transaction ID জমা দিন</div>
+      </div>
+
+      <div class="gw-step-card">
+        <h3>ধাপ ২ — Transaction ID জমা দিন</h3>
+        <div class="gw-input-group">
+          <label for="gw-trxid-input">Transaction ID (TrxID)</label>
+          <input type="text" id="gw-trxid-input" placeholder="যেমন: 8N7A2K9X1B">
+        </div>
+        <button class="gw-submit-btn" id="gw-submit-btn">কনফার্ম করুন</button>
+        <div class="gw-error" id="gw-error"></div>
+      </div>
+    </div>
+
+    <div id="gw-success-section" class="hidden">
+      <div class="gw-success-box">
+        <div class="icon">✅</div>
+        <h2>সফলভাবে জমা হয়েছে!</h2>
+        <p>আপনার ট্রানজেকশন তথ্য অ্যাডমিন প্যানেলে জমা হয়েছে। যাচাই সম্পন্ন হলে আপনার ব্যালেন্স আপডেট হয়ে যাবে।</p>
+        <button class="gw-back-btn" id="gw-success-back-btn">অ্যাপে ফিরে যান</button>
+      </div>
+    </div>
+
+    <div id="gw-expired-section" class="hidden">
+      <div class="gw-success-box">
+        <div class="icon">⏰</div>
+        <h2>সময় শেষ হয়ে গেছে</h2>
+        <p>দুঃখিত, ৯০ সেকেন্ডের মধ্যে Transaction ID জমা দেওয়া হয়নি। দয়া করে অ্যাপে ফিরে গিয়ে আবার ডিপোজিট রিকোয়েস্ট তৈরি করুন।</p>
+        <button class="gw-back-btn" id="gw-expired-back-btn">অ্যাপে ফিরে যান</button>
+      </div>
+    </div>
+  </div>
+
+<script type="module">
+/* =====================================================================
+   payment-gateway.html — external deposit confirmation page.
+   White background; accent color switches by selected method
+   (bKash = pink, Nagad = orange, Rocket = purple). Security gate
+   verifies: (1) user is signed in, (2) the depositId in the URL
+   belongs to that signed-in user and is still status:"pending".
+   No balance is credited here — this only attaches the TrxID to the
+   existing pending record for admin review / the auto-payment Cloud
+   Function to pick up.
+   ===================================================================== */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAsw8qmb_chCoEyyFuVd6Z8v8_K_m9O-HE",
+  authDomain: "booyah-king-11090.firebaseapp.com",
+  databaseURL: "https://booyah-king-11090-default-rtdb.firebaseio.com",
+  projectId: "booyah-king-11090",
+  storageBucket: "booyah-king-11090.firebasestorage.app",
+  messagingSenderId: "896832411430",
+  appId: "1:896832411430:web:09f7b133421af21f1513e7",
+  measurementId: "G-WZVBGZWNW0"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
+
+const methodTheme = {
+  bkash: { accent: "#E2136E", soft: "rgba(226,19,110,0.08)", border: "rgba(226,19,110,0.3)", label: "বিকাশ" },
+  nagad: { accent: "#F6921E", soft: "rgba(246,146,30,0.08)", border: "rgba(246,146,30,0.3)", label: "নগদ" },
+  rocket: { accent: "#8E44AD", soft: "rgba(142,68,173,0.08)", border: "rgba(142,68,173,0.3)", label: "রকেট" }
+};
+
+function applyMethodTheme(method) {
+  const theme = methodTheme[method] || methodTheme.bkash;
+  document.documentElement.style.setProperty("--accent", theme.accent);
+  document.documentElement.style.setProperty("--accent-soft", theme.soft);
+  document.documentElement.style.setProperty("--accent-border", theme.border);
+  document.getElementById("gw-method-label").textContent = "মাধ্যম: " + theme.label;
+}
+
+function formatTaka(value) {
+  const num = Number(value) || 0;
+  return "৳" + num.toLocaleString("en-BD", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function showBlocked(message) {
+  document.getElementById("loading-screen").classList.add("hidden");
+  document.getElementById("gateway-app").classList.add("hidden");
+  document.getElementById("blocked-message").textContent = message;
+  document.getElementById("blocked-screen").classList.remove("hidden");
+}
+
+document.getElementById("blocked-back-btn").addEventListener("click", () => {
+  window.location.href = "booyah-king-user.html";
+});
+document.getElementById("gw-success-back-btn").addEventListener("click", () => {
+  window.location.href = "booyah-king-user.html";
+});
+document.getElementById("gw-expired-back-btn").addEventListener("click", () => {
+  window.location.href = "booyah-king-user.html";
+});
+
+const params = new URLSearchParams(window.location.search);
+const depositId = params.get("depositId");
+
+let timerInterval = null;
+let timerDeadline = 0;
+
+function startTimer() {
+  timerDeadline = Date.now() + 90 * 1000;
+  const timerEl = document.getElementById("gw-timer");
+  const bnDigits = ["০","১","২","৩","৪","৫","৬","৭","৮","৯"];
+  function toBn(n) { return String(n).split("").map((d) => bnDigits[d] ?? d).join(""); }
+
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    const remaining = Math.max(0, Math.floor((timerDeadline - Date.now()) / 1000));
+    const m = String(Math.floor(remaining / 60)).padStart(2, "0");
+    const s = String(remaining % 60).padStart(2, "0");
+    timerEl.textContent = `${toBn(m)}:${toBn(s)}`;
+    if (remaining <= 0) {
+      clearInterval(timerInterval);
+      timerEl.classList.add("expired");
+      document.getElementById("gw-form-section").classList.add("hidden");
+      document.getElementById("gw-expired-section").classList.remove("hidden");
+    }
+  }, 250);
+}
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    showBlocked("আপনি লগইন করা নেই। দয়া করে আগে লগইন করুন।");
+    return;
+  }
+  if (!depositId) {
+    showBlocked("কোনো ডিপোজিট রিকোয়েস্ট খুঁজে পাওয়া যায়নি।");
+    return;
+  }
+
+  try {
+    const snap = await get(ref(db, `deposits/${depositId}`));
+    const deposit = snap.val();
+
+    if (!deposit || deposit.uid !== user.uid || deposit.status !== "pending") {
+      showBlocked("এই ডিপোজিট রিকোয়েস্টটি আপনার নয় অথবা ইতিমধ্যে প্রসেস হয়ে গেছে।");
+      return;
+    }
+
+    const settingsSnap = await get(ref(db, "settings/deposit"));
+    const settings = settingsSnap.val() || {};
+    const cashoutNumbers = { bkash: settings.bkash, nagad: settings.nagad, rocket: settings.rocket };
+
+    applyMethodTheme(deposit.method);
+    document.getElementById("gw-amount-display").textContent = formatTaka(deposit.amount);
+    document.getElementById("gw-amount-inline").textContent = formatTaka(deposit.amount);
+    document.getElementById("gw-cashout-number").textContent = cashoutNumbers[deposit.method] || "অ্যাডমিন নম্বর সেট করা হয়নি";
+
+    document.getElementById("loading-screen").classList.add("hidden");
+    document.getElementById("gateway-app").classList.remove("hidden");
+    startTimer();
+
+    document.getElementById("gw-copy-number-btn").addEventListener("click", () => {
+      navigator.clipboard.writeText(document.getElementById("gw-cashout-number").textContent);
+    });
+
+    document.getElementById("gw-submit-btn").addEventListener("click", async () => {
+      const errorBox = document.getElementById("gw-error");
+      errorBox.textContent = "";
+      const trxId = document.getElementById("gw-trxid-input").value.trim();
+
+      if (!trxId) { errorBox.textContent = "Transaction ID দিন।"; return; }
+      if (Date.now() > timerDeadline) { errorBox.textContent = "সময় শেষ হয়ে গেছে।"; return; }
+
+      try {
+        // Anti-spam: block duplicate TrxID across all deposits.
+        const allSnap = await get(ref(db, "deposits"));
+        const all = allSnap.val() || {};
+        const isDuplicate = Object.entries(all).some(([id, d]) => id !== depositId && d.trxId === trxId);
+        if (isDuplicate) { errorBox.textContent = "এই Transaction ID দিয়ে আগেই একটি রিকোয়েস্ট জমা হয়েছে।"; return; }
+
+        await update(ref(db, `deposits/${depositId}`), {
+          trxId,
+          submittedAt: Date.now()
+        });
+
+        clearInterval(timerInterval);
+        document.getElementById("gw-form-section").classList.add("hidden");
+        document.getElementById("gw-success-section").classList.remove("hidden");
+      } catch (err) {
+        errorBox.textContent = "জমা দিতে সমস্যা হয়েছে: " + err.message;
+      }
+    });
+  } catch (err) {
+    showBlocked("একটি সমস্যা হয়েছে: " + err.message);
+  }
+});
+</script>
+</body>
+</html>
